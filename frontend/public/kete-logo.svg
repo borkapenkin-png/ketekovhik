@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100" fill="white">
+  <!-- Curved swoosh lines above -->
+  <path d="M45 15 Q90 5 140 25" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M55 28 Q95 18 135 35" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  
+  <!-- Kete text in script style -->
+  <text x="50" y="65" font-family="'Brush Script MT', cursive, serif" font-size="42" font-weight="bold" fill="white">Kete</text>
+  
+  <!-- KOHVIK text -->
+  <text x="50" y="88" font-family="Arial, sans-serif" font-size="18" letter-spacing="4" fill="white">KOHVIK</text>
+</svg>

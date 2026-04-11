@@ -21,8 +21,8 @@ import { Textarea } from "./components/ui/textarea";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
 
-// Logo
-const LOGO_URL = "https://customer-assets.emergentagent.com/job_premium-web-design-12/artifacts/z6dgu55u_IMG_6309.jpeg";
+// Logo - SVG version without background
+const LOGO_URL = "/kete-logo.svg";
 
 // Images
 const IMAGES = {
@@ -111,7 +111,6 @@ const Header = () => {
                         src={LOGO_URL} 
                         alt="KETE Kohvik logo" 
                         className="h-12 md:h-14 w-auto object-contain"
-                        style={{ filter: "brightness(1.1)" }}
                     />
                 </a>
 
@@ -722,7 +721,6 @@ const Footer = () => {
                             src={LOGO_URL} 
                             alt="KETE Kohvik logo" 
                             className="h-10 w-auto object-contain"
-                            style={{ filter: "brightness(1.1)" }}
                         />
                     </a>
                     <p className="text-sm text-center" style={{ color: "#A3A3A3" }}>
