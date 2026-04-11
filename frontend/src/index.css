@@ -203,15 +203,23 @@ input::placeholder, textarea::placeholder {
     transform: scale(1.05);
 }
 
-/* Hide Emergent badge */
+/* Hide Emergent badge completely */
 #emergent-badge,
 a[href*="emergent.sh"],
+a[href*="emergent"],
 [id*="emergent"],
-a[href*="emergent"] {
+[class*="emergent"],
+a[id="emergent-badge"] {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
     pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
+    z-index: -9999 !important;
 }
 
 @layer base {
