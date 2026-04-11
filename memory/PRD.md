@@ -1,14 +1,20 @@
-# L'ÉTOILE - Restorani Koduleht PRD
+# KETE Kohvik - Kodulehe PRD
 
 ## Algne Probleem
-Kliendile on vaja teha premium designiga koduleht restoranile/kohvikule. Esialgu HTML/React fail kliendile näitamiseks, hiljem arendatakse PHP/MySQL baasil edasi.
+Kliendile on vaja teha premium designiga koduleht KETE Kohvikule Aravetel, Järvamaal. Esialgu HTML/React fail kliendile näitamiseks.
 
 ## Kasutaja Valikud
-- **Äri tüüp:** Restoran/kohvik
-- **Sektsioonid:** Hero, Meist, Teenused, Menüü/Hinnad, Galerii, Kontakt
-- **Disain:** Elegantne/luksuslik tumedad toonid kuldse aktsendiga
-- **Keel:** Eesti keel
-- **Logo:** L'ÉTOILE (teksti logo kuldses toonis)
+- **Äri tüüp:** KETE Kohvik - hubane kohvik vanas külapoes
+- **Asukoht:** Maarjamõisa tee 11, Aravete, 73501 Järvamaa
+- **Telefon:** +372 5804 1520
+- **Facebook:** https://www.facebook.com/profile.php?id=100063569081108
+- **Hinnad:** 1-10 €
+- **Reiting:** 4.6 / 5 (270 arvustust)
+
+## Lahtiolekuajad
+- E-N: 11:00 – 15:00
+- R: 10:00 – 15:00
+- L-P: Suletud
 
 ## Tehniline Arhitektuur
 - **Frontend:** React 19 + Tailwind CSS
@@ -19,37 +25,33 @@ Kliendile on vaja teha premium designiga koduleht restoranile/kohvikule. Esialgu
 ## Teostatud Funktsioonid ✅
 *Kuupäev: 2024-12*
 
-### Põhistruktuur
-- [x] Fikseeritud glassmorphism päis navigatsiooniga
-- [x] Hero sektsioon täisekraani pildiga
-- [x] Meist sektsioon peakoka infoga
-- [x] 3 teenuste kaardi sektsioon
-- [x] Menüü sektsioon (eelroad + pearoad hindadega)
-- [x] Galerii 4 pildiga
-- [x] Kontaktvorm reserveerimiseks
-- [x] Jalus
+### Sektsioonid
+- [x] Hero sektsioon kohviku pildiga ja 4.6 tärniga
+- [x] Meist sektsioon - nostalgiline interjöör vanas külapoes
+- [x] Teenused - Hubane Kohvik, 100-kohaline Peosaal, Kodused Road
+- [x] Menüü - Supid (€4-5), Pearoad (€6-9), Joogid (€2-3)
+- [x] Galerii - 4 pilti puhkaeestis.ee'st
+- [x] Kontakt - aadress, telefon, Facebook, lahtiolekuajad
+- [x] Google Maps kaart - õige asukoht Aravetel
+- [x] Jalus Facebook ja telefoni lingiga
+
+### Kontaktinfo (õige info netist)
+- [x] Aadress: Maarjamõisa tee 11, Aravete, 73501 Järva maakond
+- [x] Telefon: +372 5804 1520
+- [x] Facebook link
+- [x] Google Maps embed
 
 ### Disain
 - [x] Tumeda luksuslik teema (#0A0A0A)
 - [x] Kuldne aktsent värv (#D4AF37)
-- [x] Animatsioonid ja hover efektid
-- [x] Täielik mobiilse vaate tugi
+- [x] Mobiilsõbralik responsive disain
 - [x] SEO tekstid eesti keeles
 
-### Interaktiivsus
-- [x] Sujuv keritav navigatsioon
-- [x] Mobiilmenüü toggle
-- [x] Kontaktvormi valideerimine
-- [x] Toast notifikatsioonid
-
 ## Järgmised Tegevused (P0)
-- [ ] Kontaktvormi integratsioon päris e-posti saatmisega
-- [ ] PHP/MySQL backend arendus
-- [ ] CMS süsteem menüü haldamiseks
+- [ ] Kontaktvormi e-posti integratsioon
+- [ ] PHP/MySQL backend (kui soovitakse dynaamset sisu)
 
 ## Tulevased Täiendused (P1/P2)
-- [ ] Online broneerimissüsteem
-- [ ] Veinikaardi sektsioon
 - [ ] Instagram galerii integratsioon
-- [ ] Google Maps kaardi lisamine
-- [ ] Mitme keele tugi (EN, RU)
+- [ ] Online broneerimissüsteem peosaalile
+- [ ] Päevapakkumiste automaatne Facebook import
