@@ -1,0 +1,84 @@
+{
+  "theme": "dark",
+  "archetype": "5 (Jewel & Luxury)",
+  "vibe": "Intimate, cinematic, expensive, and sophisticated.",
+  "typography": {
+    "heading_font": "Playfair Display",
+    "body_font": "Outfit",
+    "logo_font": "Playfair Display",
+    "hierarchy": {
+      "h1": "text-5xl md:text-6xl font-normal tracking-tight",
+      "h2": "text-3xl md:text-4xl font-normal tracking-tight",
+      "h3": "text-xl md:text-2xl font-normal",
+      "overline": "text-xs font-semibold uppercase tracking-[0.2em] text-[#D4AF37]",
+      "body": "text-base md:text-lg font-light leading-relaxed text-[#A3A3A3]"
+    }
+  },
+  "colors": {
+    "background": "#0A0A0A",
+    "surface": "#141414",
+    "surface_light": "#1A1A1A",
+    "primary": "#D4AF37",
+    "primary_hover": "#B5952F",
+    "text_primary": "#F5F5F5",
+    "text_secondary": "#A3A3A3",
+    "border": "rgba(255, 255, 255, 0.1)",
+    "glass": "rgba(10, 10, 10, 0.6)"
+  },
+  "layout_strategy": {
+    "spacing": "Extremely generous. Use py-24 to py-32 for section vertical padding to allow the design to breathe.",
+    "alignment": "Optical alignment. Center text for hero and poetic statements. Left-align for complex data like menus and forms.",
+    "containers": "Max-w-7xl mx-auto px-6 lg:px-8",
+    "borders": "Use border-white/10 (1px solid) to create elegant, barely-there separation between sections or cards."
+  },
+  "media_urls": {
+    "hero_image": "https://images.unsplash.com/photo-1766832255363-c9f060ade8b0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwzfHxmaW5lJTIwZGluaW5nJTIwcmVzdGF1cmFudCUyMGRhcmslMjBpbnRlcmlvcnxlbnwwfHx8fDE3NzU4ODk5Mjh8MA&ixlib=rb-4.1.0&q=85",
+    "about_image": "https://images.unsplash.com/photo-1760662435569-84a4fb1fa407?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHw0fHxmaW5lJTIwZGluaW5nJTIwcmVzdGF1cmFudCUyMGRhcmslMjBpbnRlcmlvcnxlbnwwfHx8fDE3NzU4ODk5Mjh8MA&ixlib=rb-4.1.0&q=85",
+    "chef_image": "https://images.unsplash.com/photo-1759521296047-89338c8e083d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w8NjA1NTJ8MHwxfHNlYXJjaHwxfHxjaGVmJTIwcG9ydHJhaXQlMjBwcm9mZXNzaW9uYWwlMjBraXRjaGVufGVufDB8fHx8MTc3NTg4OTkyOHww&ixlib=rb-4.1.0&q=85",
+    "gallery": [
+      "https://images.pexels.com/photos/1639559/pexels-photo-1639559.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "https://images.unsplash.com/photo-1750943082012-efe6d2fd9e45?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzh8MHwxfHNlYXJjaHwxfHxnb3VybWV0JTIwZGlzaCUyMHBsYXRpbmd8ZW58MHx8fHwxNzc1ODg5OTI4fDA&ixlib=rb-4.1.0&q=85",
+      "https://images.pexels.com/photos/4870431/pexels-photo-4870431.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "https://images.unsplash.com/photo-1750943081248-833d71a2ab8e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzh8MHwxfHNlYXJjaHwyfHxnb3VybWV0JTIwZGlzaCUyMHBsYXRpbmd8ZW58MHx8fHwxNzc1ODg5OTI4fDA&ixlib=rb-4.1.0&q=85"
+    ]
+  },
+  "sections": {
+    "header": {
+      "style": "Fixed to top. Glassmorphism: backdrop-blur-xl bg-[#0A0A0A]/70 border-b border-white/10.",
+      "logo": "Text logo using Playfair Display font. The text should read 'L\\'ÉTOILE' or a similar elegant name, colored in gold (#D4AF37)."
+    },
+    "hero": {
+      "style": "Full viewport height (h-screen). Absolute positioned hero_image covering the entire background.",
+      "overlay": "bg-black/50 to ensure text readability.",
+      "content": "Centered. Overline text 'A Culinary Journey'. H1 text 'A Symphony of Flavors'. Gold CTA Button 'Reserve a Table'."
+    },
+    "about_us": {
+      "layout": "2-column grid (lg:grid-cols-2). Left side: about_image with a soft shadow and rounded corners (max rounded-sm). Right side: Text block with H2, descriptive paragraphs, and a script-style signature if possible."
+    },
+    "services": {
+      "layout": "3-column grid (lg:grid-cols-3) gap-8.",
+      "card_style": "Flat #141414 background, 1px border-white/10. Inside: Gold Lucide icon, H3 title, soft gray description."
+    },
+    "menu_prices": {
+      "layout": "2-column grid for categories (Starters, Mains).",
+      "item_style": "Flex container with 'justify-between' for Item Name and Price. A dotted line or just generous spacing between them. The description goes below the name in text-sm text-[#A3A3A3]."
+    },
+    "gallery": {
+      "layout": "CSS Grid masonry or varying col-span. 4 images minimal gap. E.g., md:grid-cols-2 lg:grid-cols-4. One image can span 2 rows for asymmetry."
+    },
+    "contact": {
+      "layout": "Split layout. Left: Contact details (Phone, Address, Hours). Right: Minimalist Contact Form.",
+      "form_style": "Shadcn Inputs with bg-transparent, border-b only or border-white/10. No thick white borders."
+    }
+  },
+  "instructions_to_main_agent": [
+    "CRITICAL: Inject Google Fonts 'Playfair Display' and 'Outfit' in index.html and configure Tailwind to use them as 'font-serif' and 'font-sans'.",
+    "Do NOT use pure #000000; use the specific #0A0A0A from colors.",
+    "Make all buttons square or minimally rounded (rounded-none or rounded-sm) to match luxury feel. No pill-shaped buttons unless it's a specific badge.",
+    "Add 'data-testid' to all interactive elements (buttons, inputs).",
+    "Use Lucide-React for icons.",
+    "Do not use generic placeholder images. Use only the provided 'media_urls'.",
+    "The restaurant needs an SEO text section. Incorporate rich, descriptive content about fine dining, organic ingredients, and luxury ambiance in the About or Services sections.",
+    "Do not render Shadcn Card components with their default white background. Override backgrounds to #141414 and borders to border-white/10."
+  ]
+}
