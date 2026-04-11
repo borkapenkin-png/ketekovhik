@@ -21,6 +21,9 @@ import { Textarea } from "./components/ui/textarea";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
 
+// Logo
+const LOGO_URL = "https://customer-assets.emergentagent.com/job_premium-web-design-12/artifacts/z6dgu55u_IMG_6309.jpeg";
+
 // Images
 const IMAGES = {
     hero: "https://visitestonia.com/images/3104699/ketekohvik6.JPG",
@@ -103,8 +106,13 @@ const Header = () => {
         <header className={`header ${isScrolled ? "py-3" : "py-5"} transition-all duration-300`}>
             <div className="section-container flex items-center justify-between">
                 {/* Logo */}
-                <a href="#" className="font-serif text-2xl md:text-3xl tracking-wider" style={{ color: "#D4AF37" }} data-testid="logo">
-                    KETE
+                <a href="#" data-testid="logo" className="flex items-center">
+                    <img 
+                        src={LOGO_URL} 
+                        alt="KETE Kohvik logo" 
+                        className="h-12 md:h-14 w-auto object-contain"
+                        style={{ filter: "brightness(1.1)" }}
+                    />
                 </a>
 
                 {/* Desktop Navigation */}
@@ -709,8 +717,13 @@ const Footer = () => {
         <footer className="footer py-12" data-testid="footer">
             <div className="section-container">
                 <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-                    <a href="#" className="font-serif text-2xl tracking-wider" style={{ color: "#D4AF37" }}>
-                        KETE
+                    <a href="#" className="flex items-center">
+                        <img 
+                            src={LOGO_URL} 
+                            alt="KETE Kohvik logo" 
+                            className="h-10 w-auto object-contain"
+                            style={{ filter: "brightness(1.1)" }}
+                        />
                     </a>
                     <p className="text-sm text-center" style={{ color: "#A3A3A3" }}>
                         © 2024 KETE Kohvik. Maarjamõisa tee 11, Aravete, Järvamaa.
