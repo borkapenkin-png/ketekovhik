@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import axios from "axios";
 import "@/App.css";
 import { 
     Coffee, 
@@ -20,6 +22,9 @@ import { Input } from "./components/ui/input";
 import { Textarea } from "./components/ui/textarea";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
+import AdminPage, { AuthProvider } from "./pages/AdminPage";
+
+const API = process.env.REACT_APP_BACKEND_URL + "/api";
 
 // Logo - SVG version without background
 const LOGO_URL = "/kete-logo.svg";
@@ -363,8 +368,32 @@ const ServicesSection = () => {
     );
 };
 
-// Menu Section
+// Menu Section - loads data from API
 const MenuSection = () => {
+    const [menuItems, setMenuItems] = useState({ soups: [], mains: [], drinks: [] });
+
+    useEffect(() => {
+        const fetchMenu = async () => {
+            try {
+                const res = await axios.get(`${API}/menu`);
+                const items = res.data;
+                setMenuItems({
+                    soups: items.filter(i => i.category === 'soups'),
+                    mains: items.filter(i => i.category === 'mains'),
+                    drinks: items.filter(i => i.category === 'drinks')
+                });
+            } catch (err) {
+                // Fallback to static data if API fails
+                setMenuItems({
+                    soups: MENU_SOUPS,
+                    mains: MENU_MAINS,
+                    drinks: MENU_DRINKS
+                });
+            }
+        };
+        fetchMenu();
+    }, []);
+
     return (
         <section id="menuu" className="py-24 md:py-32" style={{ backgroundColor: "#0A0A0A" }} data-testid="menu-section">
             <div className="section-container">
@@ -385,8 +414,8 @@ const MenuSection = () => {
                         <h3 className="font-serif text-2xl mb-8 pb-4 border-b border-white/10" style={{ color: "#D4AF37" }}>
                             Supid
                         </h3>
-                        {MENU_SOUPS.map((item, index) => (
-                            <div key={index} className="menu-item" data-testid={`menu-soup-${index}`}>
+                        {menuItems.soups.map((item, index) => (
+                            <div key={item.id || index} className="menu-item" data-testid={`menu-soup-${index}`}>
                                 <div>
                                     <p className="menu-item-name">{item.name}</p>
                                     <p className="menu-item-description">{item.description}</p>
@@ -401,8 +430,8 @@ const MenuSection = () => {
                         <h3 className="font-serif text-2xl mb-8 pb-4 border-b border-white/10" style={{ color: "#D4AF37" }}>
                             Pearoad
                         </h3>
-                        {MENU_MAINS.map((item, index) => (
-                            <div key={index} className="menu-item" data-testid={`menu-main-${index}`}>
+                        {menuItems.mains.map((item, index) => (
+                            <div key={item.id || index} className="menu-item" data-testid={`menu-main-${index}`}>
                                 <div>
                                     <p className="menu-item-name">{item.name}</p>
                                     <p className="menu-item-description">{item.description}</p>
@@ -417,8 +446,8 @@ const MenuSection = () => {
                         <h3 className="font-serif text-2xl mb-8 pb-4 border-b border-white/10" style={{ color: "#D4AF37" }}>
                             Joogid
                         </h3>
-                        {MENU_DRINKS.map((item, index) => (
-                            <div key={index} className="menu-item" data-testid={`menu-drink-${index}`}>
+                        {menuItems.drinks.map((item, index) => (
+                            <div key={item.id || index} className="menu-item" data-testid={`menu-drink-${index}`}>
                                 <div>
                                     <p className="menu-item-name">{item.name}</p>
                                     <p className="menu-item-description">{item.description}</p>
@@ -450,8 +479,24 @@ const MenuSection = () => {
     );
 };
 
-// Gallery Section
+// Gallery Section - loads data from API
 const GallerySection = () => {
+    const [images, setImages] = useState(IMAGES.gallery.map((url, i) => ({ url, alt: `KETE Kohvik ${i + 1}` })));
+
+    useEffect(() => {
+        const fetchGallery = async () => {
+            try {
+                const res = await axios.get(`${API}/gallery`);
+                if (res.data.length > 0) {
+                    setImages(res.data);
+                }
+            } catch (err) {
+                // Keep default images
+            }
+        };
+        fetchGallery();
+    }, []);
+
     return (
         <section id="galerii" className="py-24 md:py-32" style={{ backgroundColor: "#141414" }} data-testid="gallery-section">
             <div className="section-container">
@@ -464,9 +509,9 @@ const GallerySection = () => {
                 </div>
 
                 <div className="gallery-grid">
-                    {IMAGES.gallery.map((img, index) => (
-                        <div key={index} className="gallery-item" data-testid={`gallery-item-${index}`}>
-                            <img src={img} alt={`KETE Kohvik ${index + 1}`} loading="lazy" />
+                    {images.map((img, index) => (
+                        <div key={img.id || index} className="gallery-item" data-testid={`gallery-item-${index}`}>
+                            <img src={img.url} alt={img.alt} loading="lazy" />
                         </div>
                     ))}
                 </div>
@@ -752,6 +797,20 @@ const Footer = () => {
 
 // Main App Component
 function App() {
+    return (
+        <BrowserRouter>
+            <AuthProvider>
+                <Routes>
+                    <Route path="/admin" element={<AdminPage />} />
+                    <Route path="/" element={<HomePage />} />
+                </Routes>
+            </AuthProvider>
+        </BrowserRouter>
+    );
+}
+
+// Home Page Component
+const HomePage = () => {
     return (
         <div className="App" style={{ backgroundColor: "#0A0A0A", minHeight: "100vh" }}>
             <Toaster position="top-center" />
