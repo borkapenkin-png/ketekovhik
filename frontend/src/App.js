@@ -1,17 +1,19 @@
 import { useState, useEffect } from "react";
 import "@/App.css";
 import { 
+    Coffee, 
     Utensils, 
-    Wine, 
     Clock, 
     Phone, 
     MapPin, 
-    Mail,
-    ChefHat,
+    Facebook,
+    PartyPopper,
     Star,
-    Calendar,
+    Users,
     Menu,
-    X
+    X,
+    Heart,
+    Map
 } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { Input } from "./components/ui/input";
@@ -19,50 +21,60 @@ import { Textarea } from "./components/ui/textarea";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
 
-// Design images from guidelines
+// Images
 const IMAGES = {
-    hero: "https://images.unsplash.com/photo-1766832255363-c9f060ade8b0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHwzfHxmaW5lJTIwZGluaW5nJTIwcmVzdGF1cmFudCUyMGRhcmslMjBpbnRlcmlvcnxlbnwwfHx8fDE3NzU4ODk5Mjh8MA&ixlib=rb-4.1.0&q=85",
-    about: "https://images.unsplash.com/photo-1760662435569-84a4fb1fa407?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzd8MHwxfHNlYXJjaHw0fHxmaW5lJTIwZGluaW5nJTIwcmVzdGF1cmFudCUyMGRhcmslMjBpbnRlcmlvcnxlbnwwfHx8fDE3NzU4ODk5Mjh8MA&ixlib=rb-4.1.0&q=85",
-    chef: "https://images.unsplash.com/photo-1759521296047-89338c8e083d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w8NjA1NTJ8MHwxfHNlYXJjaHwxfHxjaGVmJTIwcG9ydHJhaXQlMjBwcm9mZXNzaW9uYWwlMjBraXRjaGVufGVufDB8fHx8MTc3NTg4OTkyOHww&ixlib=rb-4.1.0&q=85",
+    hero: "https://visitestonia.com/images/3104699/ketekohvik6.JPG",
+    about: "https://visitestonia.com/images/3104694/ketekohvik1.JPG",
+    interior: "https://visitestonia.com/images/3104695/ketekohvik2.JPG",
     gallery: [
-        "https://images.pexels.com/photos/1639559/pexels-photo-1639559.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-        "https://images.unsplash.com/photo-1750943082012-efe6d2fd9e45?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzh8MHwxfHNlYXJjaHwxfHxnb3VybWV0JTIwZGlzaCUyMHBsYXRpbmd8ZW58MHx8fHwxNzc1ODg5OTI4fDA&ixlib=rb-4.1.0&q=85",
-        "https://images.pexels.com/photos/4870431/pexels-photo-4870431.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-        "https://images.unsplash.com/photo-1750943081248-833d71a2ab8e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzh8MHwxfHNlYXJjaHwyfHxnb3VybWV0JTIwZGlzaCUyMHBsYXRpbmd8ZW58MHx8fHwxNzc1ODg5OTI4fDA&ixlib=rb-4.1.0&q=85"
+        "https://visitestonia.com/images/3104696/ketekohvik3.JPG",
+        "https://visitestonia.com/images/3104698/ketekohvik5.JPG",
+        "https://visitestonia.com/images/3104702/ketekohvik9.JPG",
+        "https://visitestonia.com/images/3104703/ketekohvik10.JPG"
+    ],
+    food: [
+        "https://images.unsplash.com/photo-1680420572234-1acdf5b8fb89?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NDh8MHwxfHNlYXJjaHwzfHxob21lbWFkZSUyMGZvb2QlMjBzb3VwJTIwcGFzdGElMjBjYWZlJTIwZGlzaHxlbnwwfHx8fDE3NzU4OTA4Njd8MA&ixlib=rb-4.1.0&q=85",
+        "https://images.unsplash.com/photo-1746649347365-95dbb17911e2?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NDh8MHwxfHNlYXJjaHwxfHxob21lbWFkZSUyMGZvb2QlMjBzb3VwJTIwcGFzdGElMjBjYWZlJTIwZGlzaHxlbnwwfHx8fDE3NzU4OTA4Njd8MA&ixlib=rb-4.1.0&q=85"
     ]
 };
 
-// Menu data
-const MENU_STARTERS = [
-    { name: "Tartar Eesti Veiselihast", description: "Maheveiseliha tartar meresoola, kapriste ja vutimunaga", price: "€24" },
-    { name: "Kammkarpide Carpaccio", description: "Värskelt viilutatud kammkarbid yuzu-tsitrusekastmega", price: "€28" },
-    { name: "Foie Gras Teriin", description: "Prantsuse pardimaks briošši ja viigikompotiga", price: "€32" },
-    { name: "Tomatite Burrata", description: "Kreemjas Itaalia burrata päikeses valminud tomatitega", price: "€22" }
+// Menu data - Kete Kohvik style (budget-friendly café 1-10€)
+const MENU_SOUPS = [
+    { name: "Päevasupp", description: "Värske kodune supp päeva retsepti järgi", price: "€4" },
+    { name: "Lihasupp", description: "Traditsiooniline eesti lihasupp kartuli ja juurviljadega", price: "€5" },
+    { name: "Köögiviljasupp", description: "Kerge taimetoitlaste supp hooajaliste köögiviljadega", price: "€4" }
 ];
 
 const MENU_MAINS = [
-    { name: "Wagyu Veise Filée", description: "A5 Jaapani wagyu, trühvlikartulipüree, punaveini reduktsioon", price: "€89" },
-    { name: "Homaar Thermidor", description: "Maine'i homaar gratineeritud sibulakastmega", price: "€76" },
-    { name: "Lambakare", description: "Uus-Meremaa lambakare rosmariini ja küüslauguga", price: "€58" },
-    { name: "Tursk Musta Trühvliga", description: "Põhjamere tursk musta trühvli ja šampanjakastmega", price: "€52" }
+    { name: "Kodune Pasta", description: "Kreemjas pasta päeva kastmega ja värskete ürtidega", price: "€7" },
+    { name: "Kartulikaste Lihaga", description: "Traditsiooniline kartuliroog hakklihakastmega", price: "€8" },
+    { name: "Praad Päevapakkumine", description: "Vahelduv pearoog köögi valikust", price: "€9" },
+    { name: "Pannkoogid", description: "Magusad pannkoogid moosi ja hapukoorega", price: "€6" }
+];
+
+const MENU_DRINKS = [
+    { name: "Kohv", description: "Värskelt pruulitud aromaatne kohv", price: "€2" },
+    { name: "Cappuccino", description: "Itaalia stiilis piimakohv", price: "€3" },
+    { name: "Tee", description: "Valik erinevaid teesid", price: "€2" },
+    { name: "Kodune Limonaad", description: "Värske limonaad hooajaliste marjadega", price: "€3" }
 ];
 
 // Services data
 const SERVICES = [
     {
+        icon: <Coffee size={32} />,
+        title: "Hubane Kohvik",
+        description: "Nostalgilisel sisekujundusel põhinev mõnus atmosfäär vanas külapoes. Ideaalne koht lõunasöögiks või kohvipausiks."
+    },
+    {
+        icon: <PartyPopper size={32} />,
+        title: "Peosaal",
+        description: "100-kohaline peosaal pulmadeks, sünnipäevadeks, kokkutulekuteks ja pidulikeks üritusteks. Kaunistame ruumi vastavalt teie soovidele."
+    },
+    {
         icon: <Utensils size={32} />,
-        title: "Fine Dining",
-        description: "Eksklusiivne gurmeekogemus parimate hooajaliste koostisosadega, mida valmistab meie rahvusvaheliselt tunnustatud köögitiim."
-    },
-    {
-        icon: <Wine size={32} />,
-        title: "Veinikelder",
-        description: "Üle 500 sildi sisaldav veinikelder maailma parimatest veiniregioonidest, kureeritud meie sommeljeede poolt."
-    },
-    {
-        icon: <Calendar size={32} />,
-        title: "Privaatüritused",
-        description: "Elegantne privaatne söögisaal kuni 20 külalisele – ideaalne äriõhtusöökideks ja eriliste tähtpäevade tähistamiseks."
+        title: "Kodused Road",
+        description: "Maitsvad kodused road värskest toorainest. Supid, praed, magustoidud ja hea kohv – kõik valmistatud südamega."
     }
 ];
 
@@ -92,7 +104,7 @@ const Header = () => {
             <div className="section-container flex items-center justify-between">
                 {/* Logo */}
                 <a href="#" className="font-serif text-2xl md:text-3xl tracking-wider" style={{ color: "#D4AF37" }} data-testid="logo">
-                    L'ÉTOILE
+                    KETE
                 </a>
 
                 {/* Desktop Navigation */}
@@ -110,12 +122,13 @@ const Header = () => {
                 </nav>
 
                 {/* CTA Button */}
-                <a href="#kontakt" className="hidden md:block">
+                <a href="tel:+37258041520" className="hidden md:block">
                     <Button 
                         className="bg-[#D4AF37] hover:bg-[#B5952F] text-[#0A0A0A] rounded-none text-xs uppercase tracking-widest px-6"
-                        data-testid="header-reserve-btn"
+                        data-testid="header-call-btn"
                     >
-                        Broneeri Laud
+                        <Phone size={16} className="mr-2" />
+                        Helista
                     </Button>
                 </a>
 
@@ -144,9 +157,10 @@ const Header = () => {
                             </a>
                         ))}
                         <div className="px-6 pt-4">
-                            <a href="#kontakt" onClick={() => setIsMobileMenuOpen(false)}>
+                            <a href="tel:+37258041520" onClick={() => setIsMobileMenuOpen(false)}>
                                 <Button className="w-full bg-[#D4AF37] hover:bg-[#B5952F] text-[#0A0A0A] rounded-none text-xs uppercase tracking-widest">
-                                    Broneeri Laud
+                                    <Phone size={16} className="mr-2" />
+                                    Helista Meile
                                 </Button>
                             </a>
                         </div>
@@ -162,36 +176,60 @@ const HeroSection = () => {
     return (
         <section className="hero" data-testid="hero-section">
             <div className="hero-bg">
-                <img src={IMAGES.hero} alt="L'Étoile restoran interjöör" loading="eager" />
+                <img src={IMAGES.hero} alt="KETE Kohvik väljast" loading="eager" />
             </div>
             <div className="hero-overlay"></div>
             <div className="hero-content">
                 <p className="overline animate-fade-in-up opacity-0" style={{ animationDelay: "0.2s" }}>
-                    Kulinaarne Teekond
+                    Aravete, Järvamaa
                 </p>
                 <h1 
                     className="font-serif text-5xl md:text-6xl lg:text-7xl tracking-tight mt-6 mb-6 animate-fade-in-up opacity-0"
                     style={{ animationDelay: "0.4s", color: "#F5F5F5" }}
                 >
-                    Maitsete<br />Sümfoonia
+                    KETE<br />Kohvik
                 </h1>
                 <div className="decorative-line animate-fade-in-up opacity-0" style={{ animationDelay: "0.5s" }}></div>
+                
+                {/* Rating */}
+                <div className="flex items-center justify-center gap-2 mb-6 animate-fade-in-up opacity-0" style={{ animationDelay: "0.55s" }}>
+                    <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                            <Star key={i} size={18} fill={i < 5 ? "#D4AF37" : "transparent"} color="#D4AF37" />
+                        ))}
+                    </div>
+                    <span className="text-sm" style={{ color: "#A3A3A3" }}>4.6 (270 arvustust)</span>
+                </div>
+
                 <p 
                     className="text-lg md:text-xl font-light leading-relaxed mb-10 animate-fade-in-up opacity-0 max-w-xl mx-auto"
                     style={{ animationDelay: "0.6s", color: "#A3A3A3" }}
                 >
-                    Avastage eksklusiivne fine dining kogemus, kus iga roog on meistriteos 
-                    ja iga hetk jääb meelde igaveseks.
+                    Hubane kohvik nostalgilise interjööriga vanas külapoes. 
+                    Maitsvad kodused road ja hea kohv Pärnu–Rakvere maantee ääres.
                 </p>
-                <a href="#kontakt">
-                    <Button 
-                        className="btn-primary animate-fade-in-up opacity-0 rounded-none"
-                        style={{ animationDelay: "0.8s" }}
-                        data-testid="hero-reserve-btn"
-                    >
-                        Reserveeri Laud
-                    </Button>
-                </a>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up opacity-0" style={{ animationDelay: "0.8s" }}>
+                    <a href="#kontakt">
+                        <Button 
+                            className="btn-primary rounded-none"
+                            data-testid="hero-contact-btn"
+                        >
+                            <MapPin size={16} className="mr-2" />
+                            Vaata Asukohta
+                        </Button>
+                    </a>
+                    <a href="tel:+37258041520">
+                        <Button 
+                            className="btn-outline rounded-none"
+                            variant="outline"
+                            style={{ borderColor: "#D4AF37", color: "#D4AF37" }}
+                            data-testid="hero-call-btn"
+                        >
+                            <Phone size={16} className="mr-2" />
+                            +372 5804 1520
+                        </Button>
+                    </a>
+                </div>
             </div>
         </section>
     );
@@ -207,7 +245,7 @@ const AboutSection = () => {
                     <div className="img-hover rounded-sm overflow-hidden">
                         <img 
                             src={IMAGES.about} 
-                            alt="L'Étoile restorani sisevaade" 
+                            alt="KETE Kohvik sisevaade" 
                             className="w-full h-[400px] md:h-[500px] object-cover"
                         />
                     </div>
@@ -216,31 +254,37 @@ const AboutSection = () => {
                     <div>
                         <p className="overline">Meie Lugu</p>
                         <h2 className="font-serif text-3xl md:text-4xl tracking-tight mt-4 mb-6" style={{ color: "#F5F5F5" }}>
-                            Kirg Täiuslikkuse Vastu
+                            Nostalgia ja Maitsed
                         </h2>
                         <p className="text-base md:text-lg font-light leading-relaxed mb-6" style={{ color: "#A3A3A3" }}>
-                            L'Étoile sündis 2015. aastal visioonist luua Tallinna südalinnas koht, 
-                            kus gurmeetoidukunst kohtub sooja külalislahkusega. Meie restoran on 
-                            pühendunud pakkuma ainult parimat – värskeid mahekoostisosi otse 
-                            Eesti talunikelt, hooajalisi delikatesse ja rahvusvaheliselt 
-                            tunnustatud tehnilisi võtteid.
+                            KETE kohvik asub Järvamaal, Pärnu–Rakvere maantee ääres, mitte kaugel 
+                            Piibe maanteest. Meie hubane kohvik on loodud vanasse külapoodi, kus 
+                            iga detail räägib oma lugu.
+                        </p>
+                        <p className="text-base md:text-lg font-light leading-relaxed mb-6" style={{ color: "#A3A3A3" }}>
+                            Sisekujundus on nostalgiline ja leidlik – seintel ilutsevad veneaegsed 
+                            piktogrammid, laes ripuvad piimanõudest valmistatud valgustid ning 
+                            vanast leivarestist on saanud nõude kogumiskoht. Isegi söögiriistad 
+                            leiavad oma koha vana televiisori peal.
                         </p>
                         <p className="text-base md:text-lg font-light leading-relaxed mb-8" style={{ color: "#A3A3A3" }}>
-                            Iga õhtusöök meie juures on teekond läbi maitsete, tekstuuride ja 
-                            aromide maailma. Meie elegantne interjöör ja tähelepanelik teenindus 
-                            loovad atmosfääri, mis muudab tavalise söögikorra eriliseks sündmuseks.
+                            Hea kohv ja kodused road teevad peatusest kohvikus mõnusa elamuse 
+                            igale rändurile. Tule ja avasta KETE kohviku eriline atmosfäär!
                         </p>
                         
-                        {/* Chef info */}
-                        <div className="flex items-center gap-4 pt-4 border-t border-white/10">
-                            <img 
-                                src={IMAGES.chef} 
-                                alt="Peakokk" 
-                                className="w-16 h-16 rounded-full object-cover"
-                            />
-                            <div>
-                                <p className="signature">Jean-Pierre Dubois</p>
-                                <p className="text-sm" style={{ color: "#A3A3A3" }}>Peakokk & Asutaja</p>
+                        {/* Features */}
+                        <div className="flex flex-wrap gap-4 pt-4 border-t border-white/10">
+                            <div className="flex items-center gap-2">
+                                <Heart size={20} color="#D4AF37" />
+                                <span className="text-sm" style={{ color: "#A3A3A3" }}>Kodune Atmosfäär</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Users size={20} color="#D4AF37" />
+                                <span className="text-sm" style={{ color: "#A3A3A3" }}>100-kohaline Peosaal</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Coffee size={20} color="#D4AF37" />
+                                <span className="text-sm" style={{ color: "#A3A3A3" }}>Hea Kohv</span>
                             </div>
                         </div>
                     </div>
@@ -256,9 +300,9 @@ const ServicesSection = () => {
         <section id="teenused" className="py-24 md:py-32" style={{ backgroundColor: "#141414" }} data-testid="services-section">
             <div className="section-container">
                 <div className="text-center mb-16">
-                    <p className="overline">Meie Teenused</p>
+                    <p className="overline">Mida Pakume</p>
                     <h2 className="font-serif text-3xl md:text-4xl tracking-tight mt-4" style={{ color: "#F5F5F5" }}>
-                        Erakordne Kogemus
+                        Meie Teenused
                     </h2>
                     <div className="decorative-line"></div>
                 </div>
@@ -276,6 +320,37 @@ const ServicesSection = () => {
                         </div>
                     ))}
                 </div>
+
+                {/* Event Hall Info */}
+                <div className="mt-16 p-8 border border-white/10 rounded-sm" style={{ backgroundColor: "#1A1A1A" }}>
+                    <div className="grid md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <h3 className="font-serif text-2xl mb-4" style={{ color: "#D4AF37" }}>
+                                Peosaal Üritusteks
+                            </h3>
+                            <p className="text-base font-light leading-relaxed mb-4" style={{ color: "#A3A3A3" }}>
+                                Endises müügisaalis asub nüüd avar 100-kohaline peosaal, mida saab 
+                                kaunistada erinevate ürituste tarbeks. See on suurepärane paik 
+                                pulmadeks, sünnipäevadeks, kokkutulekuteks ja pidulikeks õhtusöökideks.
+                            </p>
+                            <a href="tel:+37258041520">
+                                <Button 
+                                    className="bg-[#D4AF37] hover:bg-[#B5952F] text-[#0A0A0A] rounded-none text-xs uppercase tracking-widest"
+                                    data-testid="event-hall-btn"
+                                >
+                                    Küsi Pakkumist
+                                </Button>
+                            </a>
+                        </div>
+                        <div className="img-hover rounded-sm overflow-hidden">
+                            <img 
+                                src={IMAGES.interior} 
+                                alt="KETE kohviku sisevaade" 
+                                className="w-full h-64 object-cover"
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
     );
@@ -287,21 +362,24 @@ const MenuSection = () => {
         <section id="menuu" className="py-24 md:py-32" style={{ backgroundColor: "#0A0A0A" }} data-testid="menu-section">
             <div className="section-container">
                 <div className="text-center mb-16">
-                    <p className="overline">Gurmee Valik</p>
+                    <p className="overline">Kodused Maitsed</p>
                     <h2 className="font-serif text-3xl md:text-4xl tracking-tight mt-4" style={{ color: "#F5F5F5" }}>
                         Meie Menüü
                     </h2>
                     <div className="decorative-line"></div>
+                    <p className="text-base mt-4" style={{ color: "#A3A3A3" }}>
+                        Hinnad: 1–10 € • Kodused road värskest toorainest
+                    </p>
                 </div>
 
-                <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
-                    {/* Starters */}
+                <div className="grid lg:grid-cols-3 gap-12">
+                    {/* Soups */}
                     <div>
                         <h3 className="font-serif text-2xl mb-8 pb-4 border-b border-white/10" style={{ color: "#D4AF37" }}>
-                            Eelroad
+                            Supid
                         </h3>
-                        {MENU_STARTERS.map((item, index) => (
-                            <div key={index} className="menu-item" data-testid={`menu-starter-${index}`}>
+                        {MENU_SOUPS.map((item, index) => (
+                            <div key={index} className="menu-item" data-testid={`menu-soup-${index}`}>
                                 <div>
                                     <p className="menu-item-name">{item.name}</p>
                                     <p className="menu-item-description">{item.description}</p>
@@ -326,17 +404,37 @@ const MenuSection = () => {
                             </div>
                         ))}
                     </div>
+
+                    {/* Drinks */}
+                    <div>
+                        <h3 className="font-serif text-2xl mb-8 pb-4 border-b border-white/10" style={{ color: "#D4AF37" }}>
+                            Joogid
+                        </h3>
+                        {MENU_DRINKS.map((item, index) => (
+                            <div key={index} className="menu-item" data-testid={`menu-drink-${index}`}>
+                                <div>
+                                    <p className="menu-item-name">{item.name}</p>
+                                    <p className="menu-item-description">{item.description}</p>
+                                </div>
+                                <span className="menu-item-price">{item.price}</span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 <div className="text-center mt-16">
-                    <a href="#kontakt">
+                    <p className="text-sm mb-4" style={{ color: "#A3A3A3" }}>
+                        Menüü võib muutuda vastavalt hooajale ja saadaval olevatele toodetele
+                    </p>
+                    <a href="https://www.facebook.com/profile.php?id=100063569081108" target="_blank" rel="noopener noreferrer">
                         <Button 
                             className="btn-outline rounded-none"
                             variant="outline"
-                            data-testid="menu-reserve-btn"
+                            data-testid="menu-facebook-btn"
                             style={{ borderColor: "#D4AF37", color: "#D4AF37" }}
                         >
-                            Broneeri Degustatsioonõhtusöök
+                            <Facebook size={16} className="mr-2" />
+                            Vaata Päevapakkumisi Facebookis
                         </Button>
                     </a>
                 </div>
@@ -351,7 +449,7 @@ const GallerySection = () => {
         <section id="galerii" className="py-24 md:py-32" style={{ backgroundColor: "#141414" }} data-testid="gallery-section">
             <div className="section-container">
                 <div className="text-center mb-16">
-                    <p className="overline">Visuaalne Nauding</p>
+                    <p className="overline">Pilte Kohvikust</p>
                     <h2 className="font-serif text-3xl md:text-4xl tracking-tight mt-4" style={{ color: "#F5F5F5" }}>
                         Galerii
                     </h2>
@@ -361,7 +459,7 @@ const GallerySection = () => {
                 <div className="gallery-grid">
                     {IMAGES.gallery.map((img, index) => (
                         <div key={index} className="gallery-item" data-testid={`gallery-item-${index}`}>
-                            <img src={img} alt={`Gurmeeroog ${index + 1}`} loading="lazy" />
+                            <img src={img} alt={`KETE Kohvik ${index + 1}`} loading="lazy" />
                         </div>
                     ))}
                 </div>
@@ -370,13 +468,12 @@ const GallerySection = () => {
     );
 };
 
-// Contact Section
+// Contact Section with Google Maps
 const ContactSection = () => {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         phone: "",
-        date: "",
         guests: "",
         message: ""
     });
@@ -391,7 +488,7 @@ const ContactSection = () => {
                 border: "1px solid rgba(212, 175, 55, 0.3)"
             }
         });
-        setFormData({ name: "", email: "", phone: "", date: "", guests: "", message: "" });
+        setFormData({ name: "", email: "", phone: "", guests: "", message: "" });
     };
 
     const handleChange = (e) => {
@@ -402,9 +499,9 @@ const ContactSection = () => {
         <section id="kontakt" className="py-24 md:py-32" style={{ backgroundColor: "#0A0A0A" }} data-testid="contact-section">
             <div className="section-container">
                 <div className="text-center mb-16">
-                    <p className="overline">Võtke Ühendust</p>
+                    <p className="overline">Tule Külla</p>
                     <h2 className="font-serif text-3xl md:text-4xl tracking-tight mt-4" style={{ color: "#F5F5F5" }}>
-                        Reserveerimine
+                        Kontakt
                     </h2>
                     <div className="decorative-line"></div>
                 </div>
@@ -413,14 +510,18 @@ const ContactSection = () => {
                     {/* Contact Info */}
                     <div>
                         <h3 className="font-serif text-2xl mb-8" style={{ color: "#F5F5F5" }}>
-                            Kontaktandmed
+                            Leia Meid Üles
                         </h3>
 
                         <div className="contact-info-item">
                             <div className="contact-icon"><MapPin size={24} /></div>
                             <div>
                                 <p className="font-medium mb-1" style={{ color: "#F5F5F5" }}>Aadress</p>
-                                <p style={{ color: "#A3A3A3" }}>Viru väljak 4<br />10111 Tallinn, Eesti</p>
+                                <p style={{ color: "#A3A3A3" }}>
+                                    Maarjamõisa tee 11<br />
+                                    Aravete alevik<br />
+                                    73501 Järva maakond
+                                </p>
                             </div>
                         </div>
 
@@ -428,15 +529,25 @@ const ContactSection = () => {
                             <div className="contact-icon"><Phone size={24} /></div>
                             <div>
                                 <p className="font-medium mb-1" style={{ color: "#F5F5F5" }}>Telefon</p>
-                                <p style={{ color: "#A3A3A3" }}>+372 5123 4567</p>
+                                <a href="tel:+37258041520" className="hover:text-[#D4AF37] transition-colors" style={{ color: "#A3A3A3" }}>
+                                    +372 5804 1520
+                                </a>
                             </div>
                         </div>
 
                         <div className="contact-info-item">
-                            <div className="contact-icon"><Mail size={24} /></div>
+                            <div className="contact-icon"><Facebook size={24} /></div>
                             <div>
-                                <p className="font-medium mb-1" style={{ color: "#F5F5F5" }}>E-post</p>
-                                <p style={{ color: "#A3A3A3" }}>info@letoile.ee</p>
+                                <p className="font-medium mb-1" style={{ color: "#F5F5F5" }}>Facebook</p>
+                                <a 
+                                    href="https://www.facebook.com/profile.php?id=100063569081108" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="hover:text-[#D4AF37] transition-colors"
+                                    style={{ color: "#A3A3A3" }}
+                                >
+                                    KETE Kohvik
+                                </a>
                             </div>
                         </div>
 
@@ -445,14 +556,14 @@ const ContactSection = () => {
                             <div>
                                 <p className="font-medium mb-1" style={{ color: "#F5F5F5" }}>Lahtiolekuajad</p>
                                 <p style={{ color: "#A3A3A3" }}>
-                                    T-N: 18:00 – 23:00<br />
-                                    R-L: 18:00 – 00:00<br />
-                                    P: Suletud
+                                    E–N: 11:00 – 15:00<br />
+                                    R: 10:00 – 15:00<br />
+                                    L–P: Suletud
                                 </p>
                             </div>
                         </div>
 
-                        {/* Stars */}
+                        {/* Rating */}
                         <div className="flex items-center gap-2 mt-8 pt-8 border-t border-white/10">
                             <div className="flex">
                                 {[...Array(5)].map((_, i) => (
@@ -460,7 +571,7 @@ const ContactSection = () => {
                                 ))}
                             </div>
                             <p className="text-sm ml-2" style={{ color: "#A3A3A3" }}>
-                                Michelin Guide 2024
+                                4.6 / 5 • 270 arvustust Google'is
                             </p>
                         </div>
                     </div>
@@ -468,7 +579,7 @@ const ContactSection = () => {
                     {/* Contact Form */}
                     <div>
                         <h3 className="font-serif text-2xl mb-8" style={{ color: "#F5F5F5" }}>
-                            Broneeri Laud
+                            Saada Sõnum
                         </h3>
 
                         <form onSubmit={handleSubmit} className="space-y-6">
@@ -487,14 +598,14 @@ const ContactSection = () => {
                                 </div>
                                 <div>
                                     <Input
-                                        type="email"
-                                        name="email"
-                                        placeholder="E-posti aadress *"
-                                        value={formData.email}
+                                        type="tel"
+                                        name="phone"
+                                        placeholder="Telefon *"
+                                        value={formData.phone}
                                         onChange={handleChange}
                                         required
                                         className="bg-transparent border-0 border-b border-white/10 rounded-none focus:border-[#D4AF37] text-[#F5F5F5] placeholder:text-[#A3A3A3]"
-                                        data-testid="contact-email-input"
+                                        data-testid="contact-phone-input"
                                     />
                                 </div>
                             </div>
@@ -502,48 +613,38 @@ const ContactSection = () => {
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div>
                                     <Input
-                                        type="tel"
-                                        name="phone"
-                                        placeholder="Telefon"
-                                        value={formData.phone}
+                                        type="email"
+                                        name="email"
+                                        placeholder="E-posti aadress"
+                                        value={formData.email}
                                         onChange={handleChange}
                                         className="bg-transparent border-0 border-b border-white/10 rounded-none focus:border-[#D4AF37] text-[#F5F5F5] placeholder:text-[#A3A3A3]"
-                                        data-testid="contact-phone-input"
+                                        data-testid="contact-email-input"
                                     />
                                 </div>
                                 <div>
                                     <Input
-                                        type="date"
-                                        name="date"
-                                        value={formData.date}
+                                        type="number"
+                                        name="guests"
+                                        placeholder="Külaliste arv (ürituse puhul)"
+                                        min="1"
+                                        max="100"
+                                        value={formData.guests}
                                         onChange={handleChange}
-                                        className="bg-transparent border-0 border-b border-white/10 rounded-none focus:border-[#D4AF37] text-[#F5F5F5]"
-                                        data-testid="contact-date-input"
+                                        className="bg-transparent border-0 border-b border-white/10 rounded-none focus:border-[#D4AF37] text-[#F5F5F5] placeholder:text-[#A3A3A3]"
+                                        data-testid="contact-guests-input"
                                     />
                                 </div>
-                            </div>
-
-                            <div>
-                                <Input
-                                    type="number"
-                                    name="guests"
-                                    placeholder="Külaliste arv"
-                                    min="1"
-                                    max="20"
-                                    value={formData.guests}
-                                    onChange={handleChange}
-                                    className="bg-transparent border-0 border-b border-white/10 rounded-none focus:border-[#D4AF37] text-[#F5F5F5] placeholder:text-[#A3A3A3]"
-                                    data-testid="contact-guests-input"
-                                />
                             </div>
 
                             <div>
                                 <Textarea
                                     name="message"
-                                    placeholder="Lisasoovid või eripalved..."
+                                    placeholder="Teie sõnum või päring... *"
                                     rows={4}
                                     value={formData.message}
                                     onChange={handleChange}
+                                    required
                                     className="bg-transparent border-0 border-b border-white/10 rounded-none focus:border-[#D4AF37] text-[#F5F5F5] placeholder:text-[#A3A3A3] resize-none"
                                     data-testid="contact-message-input"
                                 />
@@ -554,9 +655,47 @@ const ContactSection = () => {
                                 className="w-full bg-[#D4AF37] hover:bg-[#B5952F] text-[#0A0A0A] rounded-none text-sm uppercase tracking-widest py-4"
                                 data-testid="contact-submit-btn"
                             >
-                                Saada Päring
+                                Saada Sõnum
                             </Button>
                         </form>
+                    </div>
+                </div>
+
+                {/* Google Maps */}
+                <div className="mt-16" data-testid="google-maps-section">
+                    <h3 className="font-serif text-2xl mb-8 text-center" style={{ color: "#F5F5F5" }}>
+                        <Map size={24} className="inline mr-2" style={{ color: "#D4AF37" }} />
+                        Asukoht Kaardil
+                    </h3>
+                    <div className="rounded-sm overflow-hidden border border-white/10">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2079.7654!2d25.9438!3d59.1567!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4692f43b5f0d3f0b%3A0x4e4e4e4e4e4e4e4e!2sMaarjam%C3%B5isa%20tee%2011%2C%20Aravete%2C%2073501%20J%C3%A4rva%20maakond!5e0!3m2!1set!2see!4v1699999999999!5m2!1set!2see"
+                            width="100%"
+                            height="400"
+                            style={{ border: 0 }}
+                            allowFullScreen=""
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            title="KETE Kohvik asukoht"
+                            data-testid="google-map-iframe"
+                        ></iframe>
+                    </div>
+                    <div className="text-center mt-6">
+                        <a 
+                            href="https://www.google.com/maps/dir//Maarjam%C3%B5isa+tee+11,+Aravete,+73501+J%C3%A4rva+maakond" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                        >
+                            <Button 
+                                className="btn-outline rounded-none"
+                                variant="outline"
+                                style={{ borderColor: "#D4AF37", color: "#D4AF37" }}
+                                data-testid="directions-btn"
+                            >
+                                <Map size={16} className="mr-2" />
+                                Ava Google Maps'is
+                            </Button>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -571,17 +710,27 @@ const Footer = () => {
             <div className="section-container">
                 <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                     <a href="#" className="font-serif text-2xl tracking-wider" style={{ color: "#D4AF37" }}>
-                        L'ÉTOILE
+                        KETE
                     </a>
-                    <p className="text-sm" style={{ color: "#A3A3A3" }}>
-                        © 2024 L'Étoile. Kõik õigused kaitstud.
+                    <p className="text-sm text-center" style={{ color: "#A3A3A3" }}>
+                        © 2024 KETE Kohvik. Maarjamõisa tee 11, Aravete, Järvamaa.
                     </p>
                     <div className="flex gap-6">
-                        <a href="#" className="text-sm hover:text-[#D4AF37] transition-colors" style={{ color: "#A3A3A3" }}>
-                            Privaatsuspoliitika
+                        <a 
+                            href="https://www.facebook.com/profile.php?id=100063569081108" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-[#A3A3A3] hover:text-[#D4AF37] transition-colors"
+                            data-testid="footer-facebook"
+                        >
+                            <Facebook size={24} />
                         </a>
-                        <a href="#" className="text-sm hover:text-[#D4AF37] transition-colors" style={{ color: "#A3A3A3" }}>
-                            Kasutustingimused
+                        <a 
+                            href="tel:+37258041520" 
+                            className="text-[#A3A3A3] hover:text-[#D4AF37] transition-colors"
+                            data-testid="footer-phone"
+                        >
+                            <Phone size={24} />
                         </a>
                     </div>
                 </div>
