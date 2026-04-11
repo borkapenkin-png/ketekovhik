@@ -203,6 +203,17 @@ input::placeholder, textarea::placeholder {
     transform: scale(1.05);
 }
 
+/* Hide Emergent badge */
+#emergent-badge,
+a[href*="emergent.sh"],
+[id*="emergent"],
+a[href*="emergent"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
 @layer base {
     [data-debug-wrapper="true"] {
         display: contents !important;
