@@ -378,7 +378,7 @@ const MenuSection = () => {
         const fetchMenu = async () => {
             try {
                 const res = await axios.get(`${API}/menu`);
-                const items = res.data;
+                const items = Array.isArray(res.data) ? res.data : [];
                 setMenuItems({
                     soups: items.filter(i => i.category === 'soups'),
                     mains: items.filter(i => i.category === 'mains'),
@@ -489,8 +489,9 @@ const GallerySection = () => {
         const fetchGallery = async () => {
             try {
                 const res = await axios.get(`${API}/gallery`);
-                if (res.data.length > 0) {
-                    setImages(res.data);
+                const galleryItems = Array.isArray(res.data) ? res.data : [];
+                if (galleryItems.length > 0) {
+                    setImages(galleryItems);
                 }
             } catch (err) {
                 // Keep default images
@@ -801,13 +802,18 @@ const Footer = () => {
 function App() {
     return (
         <BrowserRouter>
-            <AuthProvider>
-                <SEOHeadManager />
-                <Routes>
-                    <Route path="/admin" element={<AdminPage />} />
-                    <Route path="/" element={<HomePage />} />
-                </Routes>
-            </AuthProvider>
+            <SEOHeadManager />
+            <Routes>
+                <Route
+                    path="/admin"
+                    element={
+                        <AuthProvider>
+                            <AdminPage />
+                        </AuthProvider>
+                    }
+                />
+                <Route path="/" element={<HomePage />} />
+            </Routes>
         </BrowserRouter>
     );
 }
