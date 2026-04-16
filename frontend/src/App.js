@@ -23,6 +23,7 @@ import { Textarea } from "./components/ui/textarea";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
 import AdminPage, { AuthProvider } from "./pages/AdminPage";
+import { SEOHeadManager } from "./lib/seo";
 
 const API = process.env.REACT_APP_BACKEND_URL + "/api";
 
@@ -800,6 +801,7 @@ function App() {
     return (
         <BrowserRouter>
             <AuthProvider>
+                <SEOHeadManager />
                 <Routes>
                     <Route path="/admin" element={<AdminPage />} />
                     <Route path="/" element={<HomePage />} />

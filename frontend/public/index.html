@@ -30,10 +30,14 @@
             content="KETE Kohvik Aravetel pakub koduseid lõunaid, head kohvi ja 100-kohalist peosaali Järvamaal. Tule kohvikusse või küsi peo- ja cateringpakkumist."
         />
         <meta name="twitter:image" content="https://visitestonia.com/images/3104699/ketekohvik6.JPG" />
+        <link rel="icon" href="%PUBLIC_URL%/kete-logo.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="%PUBLIC_URL%/assets/logo.png" />
+        <link rel="manifest" href="%PUBLIC_URL%/site.webmanifest" />
         <script type="application/ld+json">
         {
             "@context": "https://schema.org",
-            "@type": ["LocalBusiness", "CafeOrCoffeeShop"],
+            "@type": "CafeOrCoffeeShop",
+            "@id": "https://ketekohvik.ee/#business",
             "name": "KETE Kohvik",
             "url": "https://ketekohvik.ee/",
             "description": "KETE Kohvik on hubane kohvik Aravetel, kus pakume koduseid toite, värsket kohvi ja ruumi kuni 100 külalisega sündmusteks.",
@@ -48,6 +52,20 @@
                 "addressRegion": "Järva maakond",
                 "addressCountry": "EE"
             },
+            "openingHoursSpecification": [
+                {
+                    "@type": "OpeningHoursSpecification",
+                    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday"],
+                    "opens": "11:00",
+                    "closes": "15:00"
+                },
+                {
+                    "@type": "OpeningHoursSpecification",
+                    "dayOfWeek": "Friday",
+                    "opens": "10:00",
+                    "closes": "15:00"
+                }
+            ],
             "sameAs": [
                 "https://www.facebook.com/profile.php?id=100063569081108"
             ]

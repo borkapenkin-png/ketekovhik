@@ -1,14 +1,5 @@
-# KETE Kohvik - robots.txt
 User-agent: *
 Allow: /
-
-# Sitemap
+Disallow: /admin
+Disallow: /api/
 Sitemap: https://ketekohvik.ee/sitemap.xml
-
-# Google
-User-agent: Googlebot
-Allow: /
-
-# Bing
-User-agent: Bingbot
-Allow: /
