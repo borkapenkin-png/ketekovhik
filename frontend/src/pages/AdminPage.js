@@ -606,7 +606,22 @@ const QuoteContentManager = () => {
         quote_description: "",
         quote_form_eyebrow: "",
         quote_form_title: "",
-        quote_form_description: ""
+        quote_form_description: "",
+        quote_panel_badge: "",
+        quote_panel_kicker: "",
+        quote_fact_1_value: "",
+        quote_fact_1_label: "",
+        quote_fact_1_detail: "",
+        quote_fact_2_value: "",
+        quote_fact_2_label: "",
+        quote_fact_2_detail: "",
+        quote_fact_3_value: "",
+        quote_fact_3_label: "",
+        quote_fact_3_detail: "",
+        quote_steps_title: "",
+        quote_step_1: "",
+        quote_step_2: "",
+        quote_step_3: ""
     });
     const [isEditing, setIsEditing] = useState(false);
 
@@ -619,7 +634,22 @@ const QuoteContentManager = () => {
                 quote_description: res.data.quote_description || "",
                 quote_form_eyebrow: res.data.quote_form_eyebrow || "",
                 quote_form_title: res.data.quote_form_title || "",
-                quote_form_description: res.data.quote_form_description || ""
+                quote_form_description: res.data.quote_form_description || "",
+                quote_panel_badge: res.data.quote_panel_badge || "",
+                quote_panel_kicker: res.data.quote_panel_kicker || "",
+                quote_fact_1_value: res.data.quote_fact_1_value || "",
+                quote_fact_1_label: res.data.quote_fact_1_label || "",
+                quote_fact_1_detail: res.data.quote_fact_1_detail || "",
+                quote_fact_2_value: res.data.quote_fact_2_value || "",
+                quote_fact_2_label: res.data.quote_fact_2_label || "",
+                quote_fact_2_detail: res.data.quote_fact_2_detail || "",
+                quote_fact_3_value: res.data.quote_fact_3_value || "",
+                quote_fact_3_label: res.data.quote_fact_3_label || "",
+                quote_fact_3_detail: res.data.quote_fact_3_detail || "",
+                quote_steps_title: res.data.quote_steps_title || "",
+                quote_step_1: res.data.quote_step_1 || "",
+                quote_step_2: res.data.quote_step_2 || "",
+                quote_step_3: res.data.quote_step_3 || ""
             });
         };
 
@@ -643,7 +673,22 @@ const QuoteContentManager = () => {
         { key: "quote_description", label: "Sissejuhatav tekst", multiline: true },
         { key: "quote_form_eyebrow", label: "Vormi väike pealkiri" },
         { key: "quote_form_title", label: "Vormi pealkiri" },
-        { key: "quote_form_description", label: "Vormi kirjeldus", multiline: true }
+        { key: "quote_form_description", label: "Vormi kirjeldus", multiline: true },
+        { key: "quote_panel_badge", label: "Parema paneeli badge" },
+        { key: "quote_panel_kicker", label: "Parema paneeli pealkiri", multiline: true },
+        { key: "quote_fact_1_value", label: "Fakt 1 number" },
+        { key: "quote_fact_1_label", label: "Fakt 1 silt" },
+        { key: "quote_fact_1_detail", label: "Fakt 1 kirjeldus", multiline: true },
+        { key: "quote_fact_2_value", label: "Fakt 2 number" },
+        { key: "quote_fact_2_label", label: "Fakt 2 silt" },
+        { key: "quote_fact_2_detail", label: "Fakt 2 kirjeldus", multiline: true },
+        { key: "quote_fact_3_value", label: "Fakt 3 number" },
+        { key: "quote_fact_3_label", label: "Fakt 3 silt" },
+        { key: "quote_fact_3_detail", label: "Fakt 3 kirjeldus", multiline: true },
+        { key: "quote_steps_title", label: "Sammude ploki pealkiri" },
+        { key: "quote_step_1", label: "Samm 1", multiline: true },
+        { key: "quote_step_2", label: "Samm 2", multiline: true },
+        { key: "quote_step_3", label: "Samm 3", multiline: true }
     ];
 
     return (
@@ -684,6 +729,185 @@ const QuoteContentManager = () => {
 
                 {isEditing && (
                     <div className="flex gap-4 pt-4">
+                        <Button onClick={handleSave} className="bg-[#D4AF37] hover:bg-[#B5952F] text-[#0A0A0A] rounded-none">
+                            <Save size={16} className="mr-2" /> Salvesta
+                        </Button>
+                        <Button onClick={() => setIsEditing(false)} variant="outline" className="border-white/10 text-white rounded-none">
+                            <X size={16} className="mr-2" /> Tühista
+                        </Button>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+const QuoteContentManagerV2 = () => {
+    const [settings, setSettings] = useState({
+        quote_eyebrow: "",
+        quote_title: "",
+        quote_description: "",
+        quote_form_eyebrow: "",
+        quote_form_title: "",
+        quote_form_description: "",
+        quote_panel_badge: "",
+        quote_panel_kicker: "",
+        quote_fact_1_value: "",
+        quote_fact_1_label: "",
+        quote_fact_1_detail: "",
+        quote_fact_2_value: "",
+        quote_fact_2_label: "",
+        quote_fact_2_detail: "",
+        quote_fact_3_value: "",
+        quote_fact_3_label: "",
+        quote_fact_3_detail: "",
+        quote_steps_title: "",
+        quote_step_1: "",
+        quote_step_2: "",
+        quote_step_3: ""
+    });
+    const [isEditing, setIsEditing] = useState(false);
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            const res = await axios.get(`${API}/settings`);
+            setSettings({
+                quote_eyebrow: res.data.quote_eyebrow || "",
+                quote_title: res.data.quote_title || "",
+                quote_description: res.data.quote_description || "",
+                quote_form_eyebrow: res.data.quote_form_eyebrow || "",
+                quote_form_title: res.data.quote_form_title || "",
+                quote_form_description: res.data.quote_form_description || "",
+                quote_panel_badge: res.data.quote_panel_badge || "",
+                quote_panel_kicker: res.data.quote_panel_kicker || "",
+                quote_fact_1_value: res.data.quote_fact_1_value || "",
+                quote_fact_1_label: res.data.quote_fact_1_label || "",
+                quote_fact_1_detail: res.data.quote_fact_1_detail || "",
+                quote_fact_2_value: res.data.quote_fact_2_value || "",
+                quote_fact_2_label: res.data.quote_fact_2_label || "",
+                quote_fact_2_detail: res.data.quote_fact_2_detail || "",
+                quote_fact_3_value: res.data.quote_fact_3_value || "",
+                quote_fact_3_label: res.data.quote_fact_3_label || "",
+                quote_fact_3_detail: res.data.quote_fact_3_detail || "",
+                quote_steps_title: res.data.quote_steps_title || "",
+                quote_step_1: res.data.quote_step_1 || "",
+                quote_step_2: res.data.quote_step_2 || "",
+                quote_step_3: res.data.quote_step_3 || ""
+            });
+        };
+
+        fetchSettings();
+    }, []);
+
+    const handleSave = async () => {
+        try {
+            const current = await axios.get(`${API}/settings`);
+            await axios.put(`${API}/admin/settings`, { ...current.data, ...settings }, { withCredentials: true });
+            toast.success("Pakkumise ploki tekstid uuendatud!");
+            setIsEditing(false);
+        } catch (err) {
+            toast.error("Uuendamine ebaõnnestus");
+        }
+    };
+
+    const sections = [
+        {
+            title: "Vasak Sisuplokk",
+            hint: "See osa muudab vasakut tekstiplokki enne vormi.",
+            fields: [
+                { key: "quote_eyebrow", label: "Väike pealkiri" },
+                { key: "quote_title", label: "Pealkiri" },
+                { key: "quote_description", label: "Sissejuhatav tekst", multiline: true }
+            ]
+        },
+        {
+            title: "Vormi Ülaosa",
+            hint: "Need tekstid kuvatakse vormi kohal.",
+            fields: [
+                { key: "quote_form_eyebrow", label: "Vormi väike pealkiri" },
+                { key: "quote_form_title", label: "Vormi pealkiri" },
+                { key: "quote_form_description", label: "Vormi kirjeldus", multiline: true }
+            ]
+        },
+        {
+            title: "Parem Paneel",
+            hint: "See osa muudab parempoolset infoplokki ja kolme faktikaarti.",
+            fields: [
+                { key: "quote_panel_badge", label: "Badge" },
+                { key: "quote_panel_kicker", label: "Paneeli pealkiri", multiline: true },
+                { key: "quote_fact_1_value", label: "Fakt 1 number" },
+                { key: "quote_fact_1_label", label: "Fakt 1 silt" },
+                { key: "quote_fact_1_detail", label: "Fakt 1 kirjeldus", multiline: true },
+                { key: "quote_fact_2_value", label: "Fakt 2 number" },
+                { key: "quote_fact_2_label", label: "Fakt 2 silt" },
+                { key: "quote_fact_2_detail", label: "Fakt 2 kirjeldus", multiline: true },
+                { key: "quote_fact_3_value", label: "Fakt 3 number" },
+                { key: "quote_fact_3_label", label: "Fakt 3 silt" },
+                { key: "quote_fact_3_detail", label: "Fakt 3 kirjeldus", multiline: true }
+            ]
+        },
+        {
+            title: "Sammude Plokk",
+            hint: "See osa muudab paremal all olevat \"kuidas see käib\" sisu.",
+            fields: [
+                { key: "quote_steps_title", label: "Sammude pealkiri" },
+                { key: "quote_step_1", label: "Samm 1", multiline: true },
+                { key: "quote_step_2", label: "Samm 2", multiline: true },
+                { key: "quote_step_3", label: "Samm 3", multiline: true }
+            ]
+        }
+    ];
+
+    const renderField = (field) => (
+        <div key={field.key} className="p-4 border border-white/10 rounded-sm" style={{ backgroundColor: "#141414" }}>
+            <label className="block text-sm mb-2" style={{ color: "#A3A3A3" }}>{field.label}</label>
+            {isEditing ? (
+                field.multiline ? (
+                    <Textarea
+                        value={settings[field.key]}
+                        onChange={(e) => setSettings({ ...settings, [field.key]: e.target.value })}
+                        className="bg-transparent border border-white/10 text-white"
+                        rows={4}
+                    />
+                ) : (
+                    <Input
+                        value={settings[field.key]}
+                        onChange={(e) => setSettings({ ...settings, [field.key]: e.target.value })}
+                        className="bg-transparent border border-white/10 text-white"
+                    />
+                )
+            ) : (
+                <p style={{ color: "#F5F5F5", whiteSpace: "pre-wrap" }}>{settings[field.key] || "—"}</p>
+            )}
+        </div>
+    );
+
+    return (
+        <div>
+            <div className="flex justify-between items-center mb-6">
+                <h2 className="font-serif text-2xl" style={{ color: "#F5F5F5" }}>Pakkumise Plokk</h2>
+                {!isEditing && (
+                    <Button onClick={() => setIsEditing(true)} className="bg-[#D4AF37] hover:bg-[#B5952F] text-[#0A0A0A] rounded-none">
+                        <Edit size={16} className="mr-2" /> Muuda
+                    </Button>
+                )}
+            </div>
+
+            <div className="space-y-6">
+                {sections.map((section) => (
+                    <div key={section.title} className="p-6 border border-white/10 rounded-sm" style={{ backgroundColor: "#1A1A1A" }}>
+                        <div className="mb-5">
+                            <p className="overline">{section.title}</p>
+                            <p className="mt-3 text-sm" style={{ color: "#A3A3A3" }}>{section.hint}</p>
+                        </div>
+                        <div className="grid gap-4">
+                            {section.fields.map(renderField)}
+                        </div>
+                    </div>
+                ))}
+
+                {isEditing && (
+                    <div className="flex gap-4 pt-2">
                         <Button onClick={handleSave} className="bg-[#D4AF37] hover:bg-[#B5952F] text-[#0A0A0A] rounded-none">
                             <Save size={16} className="mr-2" /> Salvesta
                         </Button>
@@ -763,7 +987,7 @@ const AdminDashboard = () => {
                         {activeTab === "hours" && <HoursManager />}
                         {activeTab === "contact" && <ContactManager />}
                         {activeTab === "gallery" && <GalleryManager />}
-                        {activeTab === "quote" && <QuoteContentManager />}
+                        {activeTab === "quote" && <QuoteContentManagerV2 />}
                     </main>
                 </div>
             </div>

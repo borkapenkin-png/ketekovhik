@@ -189,6 +189,21 @@ class SiteSettings(BaseModel):
     quote_form_eyebrow: str = "Küsi Pakkumist"
     quote_form_title: str = "Saadame sulle personaalse vastuse"
     quote_form_description: str = "Täida vorm ja saadame sulle peosaali või toitlustuse pakkumise vastavalt sinu soovile."
+    quote_panel_badge: str = "Peo planeerimiseks"
+    quote_panel_kicker: str = "Selge ülevaade enne, kui pakkumist küsid"
+    quote_fact_1_value: str = "100"
+    quote_fact_1_label: str = "külalist"
+    quote_fact_1_detail: str = "Avar saal sünnipäevaks, juubeliks või firmaõhtuks."
+    quote_fact_2_value: str = "3"
+    quote_fact_2_label: str = "lahendust"
+    quote_fact_2_detail: str = "Peosaal, kohvilaud või toitlustusega terviklahendus."
+    quote_fact_3_value: str = "1"
+    quote_fact_3_label: str = "päring"
+    quote_fact_3_detail: str = "Kirjelda soovid ära ja saame teha personaalse pakkumise."
+    quote_steps_title: str = "Kuidas see käib"
+    quote_step_1: str = "Kirjuta meile kuupäev, külaliste arv ja ürituse tüüp."
+    quote_step_2: str = "Võrdleme sinu soovid peosaali ja toitlustuse võimalustega."
+    quote_step_3: str = "Saad personaalse vastuse, mille põhjal on lihtne edasi otsustada."
 
 # ============== AUTH ENDPOINTS ==============
 
@@ -417,7 +432,7 @@ async def get_settings():
     settings = await db.site_settings.find_one({}, {"_id": 0})
     if not settings:
         return SiteSettings()
-    return settings
+    return SiteSettings(**settings)
 
 @api_router.put("/admin/settings")
 async def update_settings(settings: SiteSettings, user: dict = Depends(get_current_user)):

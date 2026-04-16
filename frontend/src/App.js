@@ -23,7 +23,7 @@ import { Textarea } from "./components/ui/textarea";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
 import AdminPage, { AuthProvider } from "./pages/AdminPage";
-import EventQuoteSectionManaged from "./components/EventQuoteSectionManaged";
+import EventQuoteSectionManagedV2 from "./components/EventQuoteSectionManagedV2";
 import { API } from "./lib/api";
 import { SEOHeadManager } from "./lib/seo";
 
@@ -831,7 +831,28 @@ const HomePage = () => {
                     description: res.data.quote_description,
                     formEyebrow: res.data.quote_form_eyebrow,
                     formTitle: res.data.quote_form_title,
-                    formDescription: res.data.quote_form_description
+                    formDescription: res.data.quote_form_description,
+                    panelBadge: res.data.quote_panel_badge,
+                    panelKicker: res.data.quote_panel_kicker,
+                    facts: [
+                        {
+                            value: res.data.quote_fact_1_value,
+                            label: res.data.quote_fact_1_label,
+                            detail: res.data.quote_fact_1_detail
+                        },
+                        {
+                            value: res.data.quote_fact_2_value,
+                            label: res.data.quote_fact_2_label,
+                            detail: res.data.quote_fact_2_detail
+                        },
+                        {
+                            value: res.data.quote_fact_3_value,
+                            label: res.data.quote_fact_3_label,
+                            detail: res.data.quote_fact_3_detail
+                        }
+                    ],
+                    stepsTitle: res.data.quote_steps_title,
+                    steps: [res.data.quote_step_1, res.data.quote_step_2, res.data.quote_step_3]
                 });
             } catch (err) {
                 setQuoteContent(null);
@@ -849,7 +870,7 @@ const HomePage = () => {
                 <HeroSection />
                 <AboutSection />
                 <ServicesSection />
-                <EventQuoteSectionManaged imageUrl={IMAGES.interior} content={quoteContent || undefined} />
+                <EventQuoteSectionManagedV2 content={quoteContent || undefined} />
                 <MenuSection />
                 <GallerySection />
                 <ContactSection />
