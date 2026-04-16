@@ -186,11 +186,119 @@
     border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.quote-image {
-    width: 100%;
+.quote-atmosphere-panel {
     height: 100%;
     min-height: 320px;
-    object-fit: cover;
+    padding: 32px;
+    background:
+        radial-gradient(circle at top left, rgba(212, 175, 55, 0.18), transparent 32%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01)),
+        #121212;
+    display: grid;
+    gap: 24px;
+}
+
+.quote-atmosphere-header {
+    display: grid;
+    gap: 14px;
+}
+
+.quote-atmosphere-badge {
+    width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1px solid rgba(212, 175, 55, 0.26);
+    color: #D4AF37;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.quote-atmosphere-kicker {
+    color: #F5F5F5;
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    line-height: 1.15;
+    max-width: 12ch;
+}
+
+.quote-facts-grid {
+    display: grid;
+    gap: 16px;
+}
+
+.quote-fact-card {
+    padding: 18px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.quote-fact-icon {
+    color: #D4AF37;
+    margin-bottom: 14px;
+}
+
+.quote-fact-value-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.quote-fact-value {
+    color: #F5F5F5;
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    line-height: 1;
+}
+
+.quote-fact-label {
+    color: #D4AF37;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.quote-fact-detail {
+    color: #A3A3A3;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.quote-steps-card {
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: grid;
+    gap: 14px;
+}
+
+.quote-steps-title {
+    color: #D4AF37;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.quote-step-item {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    gap: 14px;
+    align-items: start;
+}
+
+.quote-step-index {
+    color: rgba(212, 175, 55, 0.75);
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    line-height: 1;
+}
+
+.quote-step-item p {
+    color: #A3A3A3;
+    font-size: 14px;
+    line-height: 1.7;
 }
 
 .quote-highlight-list {
@@ -337,6 +445,17 @@
     .quote-form-footer {
         flex-direction: row;
         align-items: center;
+    }
+}
+
+@media (max-width: 767px) {
+    .quote-atmosphere-panel {
+        padding: 24px;
+    }
+
+    .quote-atmosphere-kicker {
+        max-width: none;
+        font-size: 24px;
     }
 }
 

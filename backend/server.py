@@ -183,6 +183,12 @@ class SiteSettings(BaseModel):
     hero_description: str = ""
     about_title: str = ""
     about_text: str = ""
+    quote_eyebrow: str = "Päring Peosaalile"
+    quote_title: str = "Peosaal üritusteks Järvamaal"
+    quote_description: str = "Anna meile mõne põhiandmega märku ja teeme sulle sobiva pakkumise. Mida täpsemalt kirjeldad külaliste arvu, kuupäeva ja soovitud lahendust, seda kiiremini saame vastata."
+    quote_form_eyebrow: str = "Küsi Pakkumist"
+    quote_form_title: str = "Saadame sulle personaalse vastuse"
+    quote_form_description: str = "Täida vorm ja saadame sulle peosaali või toitlustuse pakkumise vastavalt sinu soovile."
 
 # ============== AUTH ENDPOINTS ==============
 

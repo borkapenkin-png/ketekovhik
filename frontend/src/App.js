@@ -23,10 +23,9 @@ import { Textarea } from "./components/ui/textarea";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
 import AdminPage, { AuthProvider } from "./pages/AdminPage";
-import EventQuoteSection from "./components/EventQuoteSection";
+import EventQuoteSectionManaged from "./components/EventQuoteSectionManaged";
+import { API } from "./lib/api";
 import { SEOHeadManager } from "./lib/seo";
-
-const API = process.env.REACT_APP_BACKEND_URL + "/api";
 
 // Logo - SVG version without background
 const LOGO_URL = "/assets/logo.png";
@@ -820,6 +819,28 @@ function App() {
 
 // Home Page Component
 const HomePage = () => {
+    const [quoteContent, setQuoteContent] = useState(null);
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const res = await axios.get(`${API}/settings`);
+                setQuoteContent({
+                    eyebrow: res.data.quote_eyebrow,
+                    title: res.data.quote_title,
+                    description: res.data.quote_description,
+                    formEyebrow: res.data.quote_form_eyebrow,
+                    formTitle: res.data.quote_form_title,
+                    formDescription: res.data.quote_form_description
+                });
+            } catch (err) {
+                setQuoteContent(null);
+            }
+        };
+
+        fetchSettings();
+    }, []);
+
     return (
         <div className="App" style={{ backgroundColor: "#0A0A0A", minHeight: "100vh" }}>
             <Toaster position="top-center" />
@@ -828,7 +849,7 @@ const HomePage = () => {
                 <HeroSection />
                 <AboutSection />
                 <ServicesSection />
-                <EventQuoteSection imageUrl={IMAGES.interior} />
+                <EventQuoteSectionManaged imageUrl={IMAGES.interior} content={quoteContent || undefined} />
                 <MenuSection />
                 <GallerySection />
                 <ContactSection />

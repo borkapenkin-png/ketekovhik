@@ -21,9 +21,8 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Textarea } from "../components/ui/textarea";
 import { Toaster } from "../components/ui/sonner";
+import { API } from "../lib/api";
 import { toast } from "sonner";
-
-const API = process.env.REACT_APP_BACKEND_URL + "/api";
 
 // Auth Context
 const AuthContext = createContext(null);
@@ -600,6 +599,104 @@ const GalleryManager = () => {
     );
 };
 
+const QuoteContentManager = () => {
+    const [settings, setSettings] = useState({
+        quote_eyebrow: "",
+        quote_title: "",
+        quote_description: "",
+        quote_form_eyebrow: "",
+        quote_form_title: "",
+        quote_form_description: ""
+    });
+    const [isEditing, setIsEditing] = useState(false);
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            const res = await axios.get(`${API}/settings`);
+            setSettings({
+                quote_eyebrow: res.data.quote_eyebrow || "",
+                quote_title: res.data.quote_title || "",
+                quote_description: res.data.quote_description || "",
+                quote_form_eyebrow: res.data.quote_form_eyebrow || "",
+                quote_form_title: res.data.quote_form_title || "",
+                quote_form_description: res.data.quote_form_description || ""
+            });
+        };
+
+        fetchSettings();
+    }, []);
+
+    const handleSave = async () => {
+        try {
+            const current = await axios.get(`${API}/settings`);
+            await axios.put(`${API}/admin/settings`, { ...current.data, ...settings }, { withCredentials: true });
+            toast.success("Pakkumise ploki tekstid uuendatud!");
+            setIsEditing(false);
+        } catch (err) {
+            toast.error("Uuendamine ebaõnnestus");
+        }
+    };
+
+    const fields = [
+        { key: "quote_eyebrow", label: "Väike pealkiri" },
+        { key: "quote_title", label: "Pealkiri" },
+        { key: "quote_description", label: "Sissejuhatav tekst", multiline: true },
+        { key: "quote_form_eyebrow", label: "Vormi väike pealkiri" },
+        { key: "quote_form_title", label: "Vormi pealkiri" },
+        { key: "quote_form_description", label: "Vormi kirjeldus", multiline: true }
+    ];
+
+    return (
+        <div>
+            <div className="flex justify-between items-center mb-6">
+                <h2 className="font-serif text-2xl" style={{ color: "#F5F5F5" }}>Pakkumise Plokk</h2>
+                {!isEditing && (
+                    <Button onClick={() => setIsEditing(true)} className="bg-[#D4AF37] hover:bg-[#B5952F] text-[#0A0A0A] rounded-none">
+                        <Edit size={16} className="mr-2" /> Muuda
+                    </Button>
+                )}
+            </div>
+
+            <div className="p-6 border border-white/10 rounded-sm space-y-4" style={{ backgroundColor: "#1A1A1A" }}>
+                {fields.map((field) => (
+                    <div key={field.key}>
+                        <label className="block text-sm mb-2" style={{ color: "#A3A3A3" }}>{field.label}</label>
+                        {isEditing ? (
+                            field.multiline ? (
+                                <Textarea
+                                    value={settings[field.key]}
+                                    onChange={(e) => setSettings({ ...settings, [field.key]: e.target.value })}
+                                    className="bg-transparent border border-white/10 text-white"
+                                    rows={4}
+                                />
+                            ) : (
+                                <Input
+                                    value={settings[field.key]}
+                                    onChange={(e) => setSettings({ ...settings, [field.key]: e.target.value })}
+                                    className="bg-transparent border border-white/10 text-white"
+                                />
+                            )
+                        ) : (
+                            <p style={{ color: "#F5F5F5", whiteSpace: "pre-wrap" }}>{settings[field.key] || "—"}</p>
+                        )}
+                    </div>
+                ))}
+
+                {isEditing && (
+                    <div className="flex gap-4 pt-4">
+                        <Button onClick={handleSave} className="bg-[#D4AF37] hover:bg-[#B5952F] text-[#0A0A0A] rounded-none">
+                            <Save size={16} className="mr-2" /> Salvesta
+                        </Button>
+                        <Button onClick={() => setIsEditing(false)} variant="outline" className="border-white/10 text-white rounded-none">
+                            <X size={16} className="mr-2" /> Tühista
+                        </Button>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
 // Admin Dashboard
 const AdminDashboard = () => {
     const { user, logout } = useAuth();
@@ -610,6 +707,7 @@ const AdminDashboard = () => {
         { key: "hours", label: "Lahtiolekuajad", icon: <Clock size={18} /> },
         { key: "contact", label: "Kontakt", icon: <Phone size={18} /> },
         { key: "gallery", label: "Galerii", icon: <Image size={18} /> },
+        { key: "quote", label: "Pakkumine", icon: <Settings size={18} /> },
     ];
 
     const handleLogout = async () => {
@@ -665,6 +763,7 @@ const AdminDashboard = () => {
                         {activeTab === "hours" && <HoursManager />}
                         {activeTab === "contact" && <ContactManager />}
                         {activeTab === "gallery" && <GalleryManager />}
+                        {activeTab === "quote" && <QuoteContentManager />}
                     </main>
                 </div>
             </div>
