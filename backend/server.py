@@ -14,8 +14,10 @@ import bcrypt
 import jwt
 import uuid
 import base64
+import html
+import requests
 from datetime import datetime, timezone, timedelta
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List, Optional
 
 # Runtime configuration
@@ -35,6 +37,9 @@ COOKIE_SECURE = os.environ.get("COOKIE_SECURE", "true" if IS_PRODUCTION else "fa
 COOKIE_SAMESITE = os.environ.get("COOKIE_SAMESITE", "lax")
 ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin").strip().lower()
 ADMIN_INITIAL_PASSWORD = os.environ.get("ADMIN_INITIAL_PASSWORD", "").strip()
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "").strip()
+RESEND_FROM_EMAIL = os.environ.get("RESEND_FROM_EMAIL", "").strip()
+QUOTE_REQUEST_TO_EMAIL = os.environ.get("QUOTE_REQUEST_TO_EMAIL", "").strip()
 ALLOWED_ORIGINS = [
     origin.strip()
     for origin in os.environ.get(
@@ -147,6 +152,17 @@ class ContactInfo(BaseModel):
     phone: str
     facebook: str
     email: str
+
+class QuoteRequest(BaseModel):
+    name: str
+    phone: str
+    email: EmailStr
+    event_type: str
+    event_date: Optional[str] = None
+    guest_count: int = Field(..., ge=1, le=100)
+    package_type: str
+    timing: Optional[str] = None
+    details: Optional[str] = None
 
 class GalleryImage(BaseModel):
     model_config = ConfigDict(extra="ignore")
@@ -281,6 +297,82 @@ async def get_contact():
 async def update_contact(contact: ContactInfo, user: dict = Depends(get_current_user)):
     await db.contact_info.update_one({}, {"$set": contact.model_dump()}, upsert=True)
     return {"message": "Kontaktandmed uuendatud"}
+
+def send_quote_request_email(request_data: QuoteRequest):
+    if not RESEND_API_KEY or not RESEND_FROM_EMAIL or not QUOTE_REQUEST_TO_EMAIL:
+        logger.error("Quote request email config is incomplete")
+        raise HTTPException(
+            status_code=503,
+            detail="Päringut ei saa praegu saata. Helista palun numbril +372 5804 1520."
+        )
+
+    event_date = html.escape(request_data.event_date or "Täpsustamisel")
+    timing = html.escape(request_data.timing or "Täpsustamisel")
+    details = html.escape(request_data.details or "Lisainfo puudub")
+    name = html.escape(request_data.name)
+    phone = html.escape(request_data.phone)
+    email_address = html.escape(request_data.email)
+    event_type = html.escape(request_data.event_type)
+    package_type = html.escape(request_data.package_type)
+
+    subject = f"Uus peosaali pakkumise päring: {request_data.event_type}"
+    text_content = (
+        "KETE Kohviku peosaali uus päring\n\n"
+        f"Nimi: {request_data.name}\n"
+        f"Telefon: {request_data.phone}\n"
+        f"E-post: {request_data.email}\n"
+        f"Ürituse tüüp: {request_data.event_type}\n"
+        f"Soovitud kuupäev: {event_date}\n"
+        f"Külaliste arv: {request_data.guest_count}\n"
+        f"Soovitud lahendus: {request_data.package_type}\n"
+        f"Kellaaeg või ajavahemik: {timing}\n"
+        f"Lisainfo: {details}\n"
+    )
+    html_content = f"""
+    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111827;">
+      <h2 style="margin-bottom: 16px;">Uus peosaali pakkumise päring</h2>
+      <table style="border-collapse: collapse; width: 100%;">
+        <tr><td style="padding: 8px 0; font-weight: 700;">Nimi</td><td style="padding: 8px 0;">{name}</td></tr>
+        <tr><td style="padding: 8px 0; font-weight: 700;">Telefon</td><td style="padding: 8px 0;">{phone}</td></tr>
+        <tr><td style="padding: 8px 0; font-weight: 700;">E-post</td><td style="padding: 8px 0;">{email_address}</td></tr>
+        <tr><td style="padding: 8px 0; font-weight: 700;">Ürituse tüüp</td><td style="padding: 8px 0;">{event_type}</td></tr>
+        <tr><td style="padding: 8px 0; font-weight: 700;">Soovitud kuupäev</td><td style="padding: 8px 0;">{event_date}</td></tr>
+        <tr><td style="padding: 8px 0; font-weight: 700;">Külaliste arv</td><td style="padding: 8px 0;">{request_data.guest_count}</td></tr>
+        <tr><td style="padding: 8px 0; font-weight: 700;">Soovitud lahendus</td><td style="padding: 8px 0;">{package_type}</td></tr>
+        <tr><td style="padding: 8px 0; font-weight: 700;">Kellaaeg või ajavahemik</td><td style="padding: 8px 0;">{timing}</td></tr>
+        <tr><td style="padding: 8px 0; font-weight: 700; vertical-align: top;">Lisainfo</td><td style="padding: 8px 0;">{details}</td></tr>
+      </table>
+    </div>
+    """
+
+    response = requests.post(
+        "https://api.resend.com/emails",
+        headers={
+            "Authorization": f"Bearer {RESEND_API_KEY}",
+            "Content-Type": "application/json"
+        },
+        json={
+            "from": RESEND_FROM_EMAIL,
+            "to": [QUOTE_REQUEST_TO_EMAIL],
+            "reply_to": request_data.email,
+            "subject": subject,
+            "text": text_content,
+            "html": html_content
+        },
+        timeout=15
+    )
+
+    if response.status_code >= 400:
+        logger.error("Resend quote request failed: %s", response.text)
+        raise HTTPException(
+            status_code=502,
+            detail="Päringu saatmine ebaõnnestus. Proovi uuesti või helista meile."
+        )
+
+@api_router.post("/quote-request")
+async def create_quote_request(request_data: QuoteRequest):
+    send_quote_request_email(request_data)
+    return {"message": "Päring saadetud"}
 
 # ============== GALLERY ENDPOINTS ==============
 

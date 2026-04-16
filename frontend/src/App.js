@@ -23,6 +23,7 @@ import { Textarea } from "./components/ui/textarea";
 import { Toaster } from "./components/ui/sonner";
 import { toast } from "sonner";
 import AdminPage, { AuthProvider } from "./pages/AdminPage";
+import EventQuoteSection from "./components/EventQuoteSection";
 import { SEOHeadManager } from "./lib/seo";
 
 const API = process.env.REACT_APP_BACKEND_URL + "/api";
@@ -346,7 +347,7 @@ const ServicesSection = () => {
                                 kaunistada erinevate ürituste tarbeks. See on suurepärane paik 
                                 pulmadeks, sünnipäevadeks, kokkutulekuteks ja pidulikeks õhtusöökideks.
                             </p>
-                            <a href="tel:+37258041520">
+                            <a href="#peosaali-paring">
                                 <Button 
                                     className="bg-[#D4AF37] hover:bg-[#B5952F] text-[#0A0A0A] rounded-none text-xs uppercase tracking-widest"
                                     data-testid="event-hall-btn"
@@ -821,6 +822,7 @@ const HomePage = () => {
                 <HeroSection />
                 <AboutSection />
                 <ServicesSection />
+                <EventQuoteSection imageUrl={IMAGES.interior} />
                 <MenuSection />
                 <GallerySection />
                 <ContactSection />
