@@ -11,7 +11,7 @@ Kliendile on vaja teha premium designiga koduleht KETE Kohvikule Aravetel, koos 
 ## Admin Andmed
 - **URL:** /admin
 - **Kasutaja:** admin
-- **Parool:** KeteKohvik2024!
+- **Parool:** seadistatakse deploy ajal env kaudu (`ADMIN_INITIAL_PASSWORD`)
 
 ## Teostatud Funktsioonid ✅
 *Kuupäev: 2024-12*
@@ -47,6 +47,6 @@ Kliendile on vaja teha premium designiga koduleht KETE Kohvikule Aravetel, koos 
 - [x] robots.txt + sitemap.xml
 
 ## Järgmised Tegevused
-- [ ] Domeeni registreerimine (ketekohvik.ee)
+- [x] Domeen kasutuses (`ketekohvik.ee`)
 - [ ] Google My Business profiili loomine
 - [ ] Google Search Console seadistamine

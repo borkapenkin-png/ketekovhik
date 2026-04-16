@@ -21,7 +21,7 @@
   },
   
   "passed_tests": [
-    "Admin login works with credentials: admin / KeteKohvik2024!",
+    "Admin login works with configured environment credentials",
     "Admin authentication and session management (JWT cookies)",
     "Admin can view menu items in dashboard (12 items found)",
     "Admin can add new menu item (CRUD operations working)",

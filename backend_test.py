@@ -7,6 +7,7 @@ Tests all admin CMS panel functionality and public API endpoints
 import requests
 import sys
 import json
+import os
 from datetime import datetime
 
 class KETEKohvikAPITester:
@@ -16,8 +17,8 @@ class KETEKohvikAPITester:
         self.tests_run = 0
         self.tests_passed = 0
         self.admin_credentials = {
-            "username": "admin",
-            "password": "KeteKohvik2024!"
+            "username": os.environ.get("ADMIN_TEST_USERNAME", "admin"),
+            "password": os.environ.get("ADMIN_TEST_PASSWORD", "")
         }
 
     def log_test(self, name, success, details=""):
@@ -284,6 +285,9 @@ class KETEKohvikAPITester:
         print("=" * 50)
         print(f"Testing against: {self.base_url}")
         print(f"Admin credentials: {self.admin_credentials['username']}")
+        if not self.admin_credentials["password"]:
+            print("❌ Missing ADMIN_TEST_PASSWORD environment variable")
+            return False
         
         # Test admin authentication first
         if not self.test_admin_login():

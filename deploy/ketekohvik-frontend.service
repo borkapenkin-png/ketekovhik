@@ -1,0 +1,15 @@
+[Unit]
+Description=Ketekohvik frontend
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/ketekovhik/frontend
+EnvironmentFile=/var/www/ketekohvik/frontend/.env
+ExecStart=/usr/bin/env yarn start --host 127.0.0.1 --port 8100
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

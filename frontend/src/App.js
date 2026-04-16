@@ -27,7 +27,7 @@ import AdminPage, { AuthProvider } from "./pages/AdminPage";
 const API = process.env.REACT_APP_BACKEND_URL + "/api";
 
 // Logo - SVG version without background
-const LOGO_URL = "/kete-logo.svg";
+const LOGO_URL = "/assets/logo.png";
 
 // Images
 const IMAGES = {
@@ -115,7 +115,7 @@ const Header = () => {
                     <img 
                         src={LOGO_URL} 
                         alt="KETE Kohvik logo" 
-                        className="h-12 md:h-14 w-auto object-contain"
+                        className="h-20 md:h-24 lg:h-28 w-auto object-contain"
                     />
                 </a>
 
@@ -765,7 +765,7 @@ const Footer = () => {
                         <img 
                             src={LOGO_URL} 
                             alt="KETE Kohvik logo" 
-                            className="h-10 w-auto object-contain"
+                            className="h-20 w-auto max-h-none"
                         />
                     </a>
                     <p className="text-sm text-center" style={{ color: "#A3A3A3" }}>

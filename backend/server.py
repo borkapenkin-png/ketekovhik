@@ -18,14 +18,31 @@ from datetime import datetime, timezone, timedelta
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional
 
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+# Runtime configuration
+ENVIRONMENT = os.environ.get("ENVIRONMENT", "development").lower()
+IS_PRODUCTION = ENVIRONMENT == "production"
 
-# JWT Config
-JWT_SECRET = os.environ.get('JWT_SECRET', 'kete-kohvik-super-secret-key-2024')
+mongo_url = os.environ["MONGO_URL"]
+client = AsyncIOMotorClient(mongo_url)
+db = client[os.environ["DB_NAME"]]
+
+if IS_PRODUCTION and not os.environ.get("JWT_SECRET"):
+    raise RuntimeError("JWT_SECRET must be set in production")
+
+JWT_SECRET = os.environ.get("JWT_SECRET", "development-only-jwt-secret")
 JWT_ALGORITHM = "HS256"
+COOKIE_SECURE = os.environ.get("COOKIE_SECURE", "true" if IS_PRODUCTION else "false").lower() == "true"
+COOKIE_SAMESITE = os.environ.get("COOKIE_SAMESITE", "lax")
+ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin").strip().lower()
+ADMIN_INITIAL_PASSWORD = os.environ.get("ADMIN_INITIAL_PASSWORD", "").strip()
+ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get(
+        "CORS_ALLOWED_ORIGINS",
+        "http://localhost:3000,http://127.0.0.1:3000"
+    ).split(",")
+    if origin.strip()
+]
 
 # Create the main app
 app = FastAPI(title="KETE Kohvik API")
@@ -163,8 +180,24 @@ async def login(request: LoginRequest, response: Response):
     access_token = create_access_token(user_id, user["username"])
     refresh_token = create_refresh_token(user_id)
     
-    response.set_cookie(key="access_token", value=access_token, httponly=True, secure=False, samesite="lax", max_age=86400, path="/")
-    response.set_cookie(key="refresh_token", value=refresh_token, httponly=True, secure=False, samesite="lax", max_age=604800, path="/")
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        httponly=True,
+        secure=COOKIE_SECURE,
+        samesite=COOKIE_SAMESITE,
+        max_age=86400,
+        path="/"
+    )
+    response.set_cookie(
+        key="refresh_token",
+        value=refresh_token,
+        httponly=True,
+        secure=COOKIE_SECURE,
+        samesite=COOKIE_SAMESITE,
+        max_age=604800,
+        path="/"
+    )
     
     return {"id": user_id, "username": user["username"], "role": user["role"]}
 
@@ -296,31 +329,26 @@ async def update_settings(settings: SiteSettings, user: dict = Depends(get_curre
 # ============== SEED DATA ==============
 
 async def seed_admin():
-    """Create admin user if not exists"""
-    admin = await db.users.find_one({"username": "admin"})
-    if not admin:
-        hashed = hash_password("KeteKohvik2024!")
-        await db.users.insert_one({
-            "username": "admin",
-            "password_hash": hashed,
-            "role": "admin",
-            "created_at": datetime.now(timezone.utc)
-        })
-        logger.info("Admin kasutaja loodud")
-    
-    # Write credentials to file
-    import os
-    os.makedirs("/app/memory", exist_ok=True)
-    with open("/app/memory/test_credentials.md", "w") as f:
-        f.write("# KETE Kohvik Admin Credentials\n\n")
-        f.write("## Admin Login\n")
-        f.write("- Username: admin\n")
-        f.write("- Password: KeteKohvik2024!\n")
-        f.write("- Role: admin\n\n")
-        f.write("## Endpoints\n")
-        f.write("- Login: POST /api/auth/login\n")
-        f.write("- Logout: POST /api/auth/logout\n")
-        f.write("- Me: GET /api/auth/me\n")
+    """Create admin user only when bootstrap credentials are provided."""
+    admin = await db.users.find_one({"username": ADMIN_USERNAME})
+    if admin:
+        return
+
+    if not ADMIN_INITIAL_PASSWORD:
+        logger.warning("Admin bootstrap skipped because ADMIN_INITIAL_PASSWORD is not set")
+        return
+
+    if len(ADMIN_INITIAL_PASSWORD) < 12:
+        raise RuntimeError("ADMIN_INITIAL_PASSWORD must be at least 12 characters long")
+
+    hashed = hash_password(ADMIN_INITIAL_PASSWORD)
+    await db.users.insert_one({
+        "username": ADMIN_USERNAME,
+        "password_hash": hashed,
+        "role": "admin",
+        "created_at": datetime.now(timezone.utc)
+    })
+    logger.info("Admin kasutaja loodud env bootstrapi kaudu")
 
 async def seed_initial_data():
     """Seed initial menu, hours, contact, gallery data"""
@@ -406,7 +434,7 @@ app.include_router(api_router)
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
 )
